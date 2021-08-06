@@ -1,0 +1,5 @@
+From: <from@example.com>
+To: <to@example.com>
+Subject: Saying Hello
+
+This is a message just to say hello.
