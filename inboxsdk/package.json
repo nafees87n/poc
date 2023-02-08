@@ -1,0 +1,30 @@
+{
+  "name": "gmail_extension_snooze",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "rm -rf dist && rollup -c",
+    "watch": "rm -rf dist && rollup -cw"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SDeyGitHubber/Gmail_Extension_Snooze.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SDeyGitHubber/Gmail_Extension_Snooze/issues"
+  },
+  "homepage": "https://github.com/SDeyGitHubber/Gmail_Extension_Snooze#readme",
+  "dependencies": {
+    "@inboxsdk/core": "^0.2.20"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "rollup": "^3.14.0",
+    "rollup-plugin-copy": "^3.4.0"
+  },
+  "type": "module"
+}
