@@ -16,7 +16,7 @@ export default [
     plugins: [...plugins],
   },
   {
-    input: "@inboxsdk/core/pageWorld.js",
+    input: "@inboxsdk/core/pageWorld.js", // don't remove if you're working with inboxsdk
     output: {
       file: `${OUTPUT_DIR}/pageWorld.js`,
       format: "iife",
