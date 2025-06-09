@@ -1,116 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CORS withCredentials Local Demo</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        .section {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border-left: 4px solid #007bff;
-        }
-        .button-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin: 15px 0;
-        }
-        button {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            min-width: 140px;
-        }
-        button:hover {
-            background: #0056b3;
-            transform: translateY(-2px);
-        }
-        button.danger {
-            background: #dc3545;
-        }
-        button.danger:hover {
-            background: #c82333;
-        }
-        button.success {
-            background: #28a745;
-        }
-        button.success:hover {
-            background: #218838;
-        }
-        .result {
-            background: #e9ecef;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 15px;
-            white-space: pre-wrap;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        .success-result {
-            background: #d4edda;
-            border-left: 4px solid #28a745;
-        }
-        .error-result {
-            background: #f8d7da;
-            border-left: 4px solid #dc3545;
-        }
-        .info {
-            background: #d1ecf1;
-            border: 1px solid #bee5eb;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-        }
-        code {
-            background: #f1f3f4;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: monospace;
-        }
-        .status {
-            font-weight: bold;
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        .logged-in {
-            background: #d4edda;
-            color: #155724;
-        }
-        .logged-out {
-            background: #f8d7da;
-            color: #721c24;
-        }
-    </style>
+    <link rel="stylesheet" href="main.css">
 </head>
+
 <body>
     <div class="container">
         <h1>🌐 CORS withCredentials Demo</h1>
-        <p>This page runs on <code>http://localhost:3003</code> and makes requests to <code>http://localhost:3001</code></p>
+        <p>This page runs on <code>http://localhost:3003</code> and makes requests to <code>http://localhost:3652</code>
+        </p>
 
         <div id="authStatus" class="status logged-out">
             Status: Not logged in
@@ -149,127 +51,20 @@
             <h4>💡 What to observe:</h4>
             <ul>
                 <li><strong>Without credentials:</strong> Server won't receive cookies, profile requests will fail</li>
-                <li><strong>With credentials:</strong> Server receives cookies, profile requests succeed after login</li>
+                <li><strong>With credentials:</strong> Server receives cookies, profile requests succeed after login
+                </li>
                 <li><strong>Public endpoints:</strong> Work regardless of credentials</li>
                 <li><strong>Debug endpoint:</strong> Shows exactly what cookies and headers the server receives</li>
             </ul>
         </div>
 
         <div id="result" class="result">
-Click "Login" first, then try the different request types to see how withCredentials affects cookie transmission!
+            Click "Login" first, then try the different request types to see how withCredentials affects cookie
+            transmission!
         </div>
     </div>
 
-    <script>
-        const API_BASE = 'http://localhost:3001';
-        let isLoggedIn = false;
-
-        function updateAuthStatus() {
-            const statusEl = document.getElementById('authStatus');
-            if (isLoggedIn) {
-                statusEl.textContent = 'Status: Logged in ✅';
-                statusEl.className = 'status logged-in';
-            } else {
-                statusEl.textContent = 'Status: Not logged in ❌';
-                statusEl.className = 'status logged-out';
-            }
-        }
-
-        function updateResult(message, type = 'info') {
-            const resultEl = document.getElementById('result');
-            resultEl.textContent = message;
-            resultEl.className = `result ${type}-result`;
-        }
-
-        async function login() {
-            try {
-                updateResult('Logging in...');
-
-                const response = await fetch(`${API_BASE}/api/login`, {
-                    method: 'POST',
-                    credentials: 'include' // Important: include credentials to set cookies
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                isLoggedIn = true;
-                updateAuthStatus();
-                updateResult(`LOGIN SUCCESS!\n${JSON.stringify(data, null, 2)}`, 'success');
-
-            } catch (error) {
-                updateResult(`LOGIN FAILED!\nError: ${error.message}`, 'error');
-            }
-        }
-
-        async function logout() {
-            try {
-                updateResult('Logging out...');
-
-                const response = await fetch(`${API_BASE}/api/logout`, {
-                    method: 'POST',
-                    credentials: 'include' // Include credentials to clear cookies
-                });
-
-                const data = await response.json();
-                isLoggedIn = false;
-                updateAuthStatus();
-                updateResult(`LOGOUT SUCCESS!\n${JSON.stringify(data, null, 2)}`, 'success');
-
-            } catch (error) {
-                updateResult(`LOGOUT FAILED!\nError: ${error.message}`, 'error');
-            }
-        }
-
-        function xhrRequest(endpoint, withCredentials) {
-            updateResult(`Making XHR request to ${endpoint}...\nwithCredentials: ${withCredentials}`);
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', `${API_BASE}${endpoint}`);
-            xhr.withCredentials = withCredentials; // This is the key setting!
-
-            xhr.onload = function() {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    const data = JSON.parse(xhr.responseText);
-                    updateResult(`XHR SUCCESS (withCredentials: ${withCredentials})\nStatus: ${xhr.status}\n\n${JSON.stringify(data, null, 2)}`, 'success');
-                } else {
-                    const errorData = xhr.responseText ? JSON.parse(xhr.responseText) : {};
-                    updateResult(`XHR ERROR (withCredentials: ${withCredentials})\nStatus: ${xhr.status}\n\n${JSON.stringify(errorData, null, 2)}`, 'error');
-                }
-            };
-
-            xhr.onerror = function() {
-                updateResult(`XHR NETWORK ERROR (withCredentials: ${withCredentials})\nThis might be a CORS issue. Check the server console.`, 'error');
-            };
-
-            xhr.send();
-        }
-
-        async function fetchRequest(endpoint, credentials) {
-            try {
-                updateResult(`Making Fetch request to ${endpoint}...\ncredentials: '${credentials}'`);
-
-                const response = await fetch(`${API_BASE}${endpoint}`, {
-                    credentials: credentials // 'omit', 'same-origin', or 'include'
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    updateResult(`FETCH SUCCESS (credentials: '${credentials}')\nStatus: ${response.status}\n\n${JSON.stringify(data, null, 2)}`, 'success');
-                } else {
-                    updateResult(`FETCH ERROR (credentials: '${credentials}')\nStatus: ${response.status}\n\n${JSON.stringify(data, null, 2)}`, 'error');
-                }
-
-            } catch (error) {
-                updateResult(`FETCH NETWORK ERROR (credentials: '${credentials}')\nError: ${error.message}\nThis might be a CORS issue.`, 'error');
-            }
-        }
-
-        // Initialize
-        updateAuthStatus();
-    </script>
+    <script src="main.js"></script>
 </body>
+
 </html>

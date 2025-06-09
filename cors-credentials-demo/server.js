@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 
 const app = express();
-const PORT = 3001;
+const PORT = 3652;
 const CLIENT_PORT = 3003;
 
 // Middleware
@@ -44,7 +44,7 @@ app.use(cors(corsOptions));
 app.post("/api/login", (req, res) => {
 	// Set an authentication cookie
 	res.cookie("authToken", "user123-secret-token", {
-		httpOnly: true,
+		httpOnly: false,
 		secure: false, // Set to true in production with HTTPS
 		sameSite: "lax",
 		maxAge: 24 * 60 * 60 * 1000, // 24 hours
@@ -54,6 +54,12 @@ app.post("/api/login", (req, res) => {
 	res.cookie("username", "johnDoe", {
 		maxAge: 24 * 60 * 60 * 1000,
 	});
+
+	//log all response headers
+	console.log("Response headers after login:");
+	const d = res.getHeaders()["set-cookie"];
+
+	console.log("!!!debug", "dd", d);
 
 	res.json({
 		message: "Login successful",
@@ -144,7 +150,7 @@ app.listen(PORT, () => {
 	console.log(`   POST http://localhost:${PORT}/api/logout`);
 	console.log(`   GET  http://localhost:${PORT}/api/debug`);
 	console.log(
-		"\n🔧 Next: Run the client on port 3000 to test CORS with credentials"
+		"\n🔧 Next: Run the client on port 3003 to test CORS with credentials"
 	);
 });
 
