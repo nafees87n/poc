@@ -24,7 +24,7 @@ async function login() {
 
 		const response = await fetch(`${API_BASE}/api/login`, {
 			method: "POST",
-			credentials: "omit", // Important: include credentials to set cookies
+			credentials: "include", // Important: include credentials to set cookies
 		});
 		console.log(
 			"!!!debug",
