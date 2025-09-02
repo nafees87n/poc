@@ -14,7 +14,10 @@ app.use(express.json());
 
 // // CORS configuration - this is the key part!
 const corsOptions = {
-	origin: `http://localhost:${CLIENT_PORT}`, // Must be specific, not '*' when using credentials
+	origin: [
+		`http://localhost:${CLIENT_PORT}`,
+		// "chrome-extension://illkfkpmlicfnbemnddgekdenjkahebd",
+	], // Must be specific, not '*' when using credentials
 	credentials: true, // Allow credentials (cookies, authorization headers)
 	optionsSuccessStatus: 200,
 };
@@ -42,6 +45,7 @@ app.use(cors(corsOptions));
 
 // 1. Set a cookie (login simulation)
 app.post("/api/login", (req, res) => {
+	console.log("Request headers:", req.headers);
 	// Set an authentication cookie
 	res.cookie("authToken", "user123-secret-token", {
 		httpOnly: false,
@@ -55,11 +59,8 @@ app.post("/api/login", (req, res) => {
 		maxAge: 24 * 60 * 60 * 1000,
 	});
 
-	//log all response headers
-	console.log("Response headers after login:");
-	const d = res.getHeaders()["set-cookie"];
-
-	console.log("!!!debug", "dd", d);
+	res.header("content-security-policy", "default-src 'self'");
+	res.header("x-frame-options", "DENY");
 
 	res.json({
 		message: "Login successful",
@@ -105,6 +106,7 @@ app.get("/api/public", (req, res) => {
 		message: "This is public data - no authentication required",
 		cookiesReceived: req.cookies,
 		timestamp: new Date().toISOString(),
+		body: req.body,
 	});
 });
 
