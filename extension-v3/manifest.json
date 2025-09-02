@@ -1,9 +1,15 @@
 {
-    "name":"Chrome v3",
-    "version":"0.0.1",
-    "manifest_version":3,
-    "background":{
-        "service_worker":"background.js"
-    },
-    "action":{}
+	"name": "Chrome v3",
+	"version": "0.0.1",
+	"manifest_version": 3,
+	"background": {
+		"service_worker": "background.js"
+	},
+	"action": {
+		"default_popup": "options.html"
+	},
+	"permissions": ["offscreen"],
+	"content_security_policy": {
+		"extension_pages": "script-src 'self'; script-src-elem 'self'; object-src 'self'"
+	}
 }

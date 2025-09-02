@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>JavaScript Sandbox</title>
+  <meta charset="UTF-8" />
+  <script defer src="./index.js"></script>
+</head>
+
+<body>
+  <div>
+    <input type="file" name="upload file" id="file-input" />
+    <button id="send-btn">send request</button>
+  </div>
+  <script>
+
+    // document.getElementById("send-btn").addEventListener("click", async () => {
+    //   const formData = new FormData();
+
+    //   const fileToSend = document.getElementById("file-input");
+    //   console.log("debug1", fileToSend.files[0]);
+    //   formData.append("jsonFile", fileToSend.files[0]);
+
+    //   const response = await fetch("http://localhost:3300/upload", {
+    //     method: "POST",
+    //     body: formData,
+    //   });
+
+    //   const result = await response.json();
+    //   console.log(JSON.stringify(result, null, 2));
+    // });
+
+
+
+    const inputElement = document.getElementById("file-input");
+    inputElement.addEventListener("change", async (event) => {
+
+      const fileToSend = document.getElementById("file-input");
+      window.jsonFileRef = fileToSend.files[0];
+      // console.log("debug1", fileToSend.files[0]);
+      // formData.append("jsonFile", fileToSend.files[0]);
+
+      // const response = await fetch("http://localhost:3300/upload", {
+      //   method: "POST",
+      //   body: formData,
+      // });
+
+      // const result = await response.json();
+      // console.log(JSON.stringify(result, null, 2));
+      chrome.runtime.sendMessage(
+        { action: "sendRequest" },
+      );
+    });
+    inputElement.click()
+  </script>
+</body>
+
+</html>
